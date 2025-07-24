@@ -1,0 +1,87 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ object.judul }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-9">
+        
+        <div class="card p-3 p-md-4">
+            <div class="card-body">
+                <article>
+                    <div class="text-center mb-4">
+                        <h2 class="card-title fw-bold">{{ object.judul }}</h2>
+                        <p class="text-muted">
+                            Dibuat pada {{ object.dibuat_pada|date:"d F Y" }} oleh 
+                            <a href="{% url 'profil' object.penulis.username %}" class="fw-bold text-decoration-none" style="color: #d63384;">{{ object.penulis.username }}</a>
+                        </p>
+                        <span class="badge bg-secondary rounded-pill">{{ object.kategori.nama|default:"Tanpa Kategori" }}</span>
+                        <span class="badge bg-info rounded-pill">{{ object.status }}</span>
+                    </div>
+
+                    {% if object.gambar %}
+                        <div class="text-center mb-4">
+                            <img src="{{ object.gambar.url }}" class="img-fluid rounded-3" style="max-height: 450px; width: 100%; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.1);" alt="Gambar untuk {{ object.judul }}">
+                        </div>
+                    {% endif %}
+                    <div class="fs-5 mt-4" style="text-align: justify; line-height: 1.8;">
+                        {{ object.deskripsi|linebreaks }}
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-flex align-items-center flex-wrap gap-2">
+                        <form action="{% url 'ide-suka' object.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                ❤️ {{ object.jumlah_suka }} Suka
+                            </button>
+                        </form>
+                        {% if object.penulis == user %}
+                            <a href="{% url 'ide-update' object.pk %}" class="btn btn-secondary rounded-pill">Edit</a>
+                            <a href="{% url 'ide-delete' object.pk %}" class="btn btn-outline-danger rounded-pill">Hapus</a>
+                        {% endif %}
+                    </div>
+                </article>
+
+                <div class="mt-5">
+                    <h3 class="fw-bold">Komentar ({{ komentar_list.count }})</h3>
+                    <hr>
+                    {% if user.is_authenticated %}
+                        <div class="mb-4">
+                            <form method="post" action="{% url 'tambah-komentar' object.pk %}">
+                                {% csrf_token %}
+                                <div class="mb-2">
+                                    {{ komentar_form.isi }}
+                                </div>
+                                <button type="submit" class="btn btn-primary">Kirim Komentar</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p><a href="{% url 'login' %}" class="fw-bold text-decoration-none" style="color: #d63384;">Login</a> untuk menambahkan komentar.</p>
+                    {% endif %}
+                    
+                    {% for komentar in komentar_list %}
+                        <div class="d-flex mb-3 p-3 bg-light rounded-3">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                    <strong class="fs-5">{{ komentar.penulis.username|first|upper }}</strong>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <p class="mb-1">
+                                    <strong>{{ komentar.penulis.username }}</strong> 
+                                    <small class="text-muted ms-2">{{ komentar.dibuat_pada|timesince }} yang lalu</small>
+                                </p>
+                                {{ komentar.isi|linebreaksbr }}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">Jadilah yang pertama berkomentar!</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "core/base.html" %}
+{% block title %}Login ke IdeaBox{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            
+            <div class="card p-4 p-md-5 mt-4">
+                <div class="card-body">
+                    
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">Selamat Datang Kembali!</h2>
+                        <p class="text-muted">Login untuk melanjutkan petualangan idemu.</p>
+                    </div>
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mb-3">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control {% if form.username.errors %}is-invalid{% endif %}" name="username" id="id_username" placeholder="Username Anda" required>
+                            <label for="id_username">Username</label>
+                            {% for error in form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" name="password" id="id_password" placeholder="Password Anda" required>
+                            <label for="id_password">Password</label>
+                             {% for error in form.password.errors %}
+                                <div class="invalid-feedback">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-custom btn-lg">Login</button>
+                        </div>
+
+                    </form>
+                    <div class="text-center mt-4">
+                        <p class="text-muted">Belum punya akun? <a href="{% url 'signup' %}" class="fw-bold text-decoration-none" style="color: #d63384;">Daftar di sini</a></p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

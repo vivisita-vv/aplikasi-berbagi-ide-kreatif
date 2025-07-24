@@ -1,0 +1,25 @@
+{% extends "core/base.html" %}
+
+{% block title %}Profil {{ profil_user.username }}{% endblock %}
+
+{% block content %}
+    <div class="col-md-8 offset-md-2">
+        <div class="card p-3 mb-4">
+            <h2>Profil: {{ profil_user.username }}</h2>
+            <p>Email: {{ profil_user.email }}</p>
+            <p>Total Ide Dibuat: {{ ide_user.count }}</p>
+        </div>
+
+        <h3 class="mb-3">Ide oleh {{ profil_user.username }}</h3>
+        {% for ide in ide_user %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h4 class="card-title"><a href="{{ ide.get_absolute_url }}" class="text-decoration-none">{{ ide.judul }}</a></h4>
+                    <p class="card-subtitle mb-2 text-muted">{{ ide.dibuat_pada|date:"d M Y" }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <p>{{ profil_user.username }} belum membuat ide.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

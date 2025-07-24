@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+
+{% block title %}Formulir Ide{% endblock %}
+
+{% block content %}
+    <div class="col-md-6 offset-md-3">
+        <div class="card p-4">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">{% if form.instance.pk %}Edit Ide{% else %}Buat Ide Baru{% endif %}</h2>
+                
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Simpan</button>
+                    </div>
+                </form>
+                </div>
+        </div>
+    </div>
+{% endblock %}

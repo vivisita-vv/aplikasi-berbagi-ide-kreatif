@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+
+{% block title %}Hapus Ide{% endblock %}
+
+{% block content %}
+    <div class="col-md-6 offset-md-3">
+        <h2 class="mb-4">Hapus Ide</h2>
+        <p>Apakah Anda yakin ingin menghapus ide berjudul "<strong>{{ object.judul }}</strong>"?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+            <a href="{{ object.get_absolute_url }}" class="btn btn-secondary">Batal</a>
+        </form>
+    </div>
+{% endblock %}
